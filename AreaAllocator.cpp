@@ -3,15 +3,18 @@
 template <typename T, size_t N>
 class AreaAllocator {
 public:
-    using size_type = size_t;
     using value_type = T;
     using pointer = T*;
+    using size_type = size_t;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
 
-    AreaAllocator() : buffer(static_cast<pointer>(operator new (sizeof(value_type) * N)))
+    AreaAllocator() : buffer(static_cast<pointer>(::operator new (sizeof(value_type) * N)))
     {}
 
     ~AreaAllocator() {
-        operator delete(buffer);
+        ::operator delete(buffer);
     }   
 
     pointer allocate(size_type n) {
@@ -32,6 +35,10 @@ public:
 
     void destroy(pointer p) {
         p->~value_type();
+    }
+
+    void deallocate(pointer p, size_type n) noexcept {
+        // no-op
     }
 
     void reset() {

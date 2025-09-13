@@ -7,11 +7,14 @@ public:
     using value_type = T;
     using pointer = T*;
     using size_type = size_t;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
 
     DebugAllocator() = default;
 
     pointer allocate(size_type n) {
-        pointer p = static_cast<pointer>(operator new (sizeof(value_type) * n));
+        pointer p = static_cast<pointer>(::operator new (sizeof(value_type) * n));
         std::cout << "Memory allocated in: " << p << "\n"; 
         return p;
     }
@@ -21,14 +24,14 @@ public:
         new (p) value_type(std::forward<Args>(args)...);
     }
 
-    void destroy(pointer p) {
+    void destroy(pointer p) {operator new
         std::cout << "Memory destroyed in: " << p << "\n";
         p->~value_type();
     }
 
     void deallocate(pointer p, size_type n) {
         std::cout << "Memory deallocated in: " << p << "\n";
-        operator delete(p);
+        ::operator delete(p);
     }
 
     template <typename U>

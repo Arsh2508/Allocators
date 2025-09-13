@@ -8,6 +8,9 @@ public:
     using value_type = T;
     using pointer = T*;
     using size_type = size_t;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
 
     PoolAllocator(size_type _block_size, size_type _block_count) 
         : block_size{std::max(_block_size, sizeof(void*))}
